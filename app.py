@@ -40,7 +40,8 @@ def main():
     """
     This function is the main entry point of the application. It sets up the Groq client, the Streamlit interface, and handles the chat interaction.
     """
-    
+    st.set_page_config(page_title='FlexiBot', layout='wide')
+
     # Apply custom CSS to improve text layout
     st.markdown(
         """
@@ -53,6 +54,7 @@ def main():
         """, 
         unsafe_allow_html=True
     )
+
 
     # Get Groq API key
     groq_api_key = os.getenv('GROQ_API_KEY')
@@ -137,6 +139,28 @@ def main():
         message = {'human': user_question, 'AI': response}
         st.session_state.chat_history.append(message)
         display_typing_effect(response, typing_delay)  # Use the typing effect function with delay
+
+    # Display "About the Author" section
+    st.sidebar.title("About the Author")
+    st.sidebar.markdown("""
+    Hi there! I'm Aditya, an aspiring ML engineer with a passion for machine learning, deep learning, and problem-solving. I love working on diverse projects and exploring new technologies. Connect with me to stay updated on my latest projects and endeavors!
+    """)
+
+    # Function to display "Connect with Me" section
+    def display_connect_with_me():
+        st.sidebar.markdown("""
+            <h3 align="left">Connect with me:</h3>
+            <p align="left">
+            <a href="https://twitter.com/Adityak22723056" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="Twitter" height="30" width="40" /></a>
+            <a href="https://linkedin.com/in/aditya-kumar-tiwari-a14547232" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="LinkedIn" height="30" width="40" /></a>
+            <a href="https://kaggle.com/aditya0kumar0tiwari" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/kaggle.svg" alt="Kaggle" height="30" width="40" /></a>
+            <a href="https://instagram.com/_aadi_anant" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="Instagram" height="30" width="40" /></a>
+            <a href="https://www.leetcode.com/_aadi_anant" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="LeetCode" height="30" width="40" /></a>
+            </p>
+        """, unsafe_allow_html=True)
+
+    # Display "Connect with Me" section
+    display_connect_with_me()
 
 if __name__ == "__main__":
     main()
