@@ -40,9 +40,7 @@ To run FlexiBot locally, follow these steps:
 3. Create a `.env` file and set your GROQ_API_KEY.
 4. Run the Streamlit app using `streamlit run app.py`.
 
-## About
-
-FlexiBot is developed and maintained by [Your Name]. It is built using advanced natural language processing techniques to provide a seamless chat experience.
+## Contribution
 
 Feel free to contribute to the project by opening issues or pull requests!
 
