@@ -3,3 +3,4 @@ groq
 langchain
 langchain-groq
 python-dotenv
+speech_recognition
