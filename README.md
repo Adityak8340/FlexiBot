@@ -1,5 +1,11 @@
-# FlexiBot 🤖
+# Sample
 
+[streamlit-app-2024-05-29-10-05-67.webm](https://github.com/Adityak8340/FlexiBot/assets/140245948/ceada8a2-323d-41fa-96b6-cfdfd5167039)
+
+
+![FlexiBot](https://github.com/Adityak8340/FlexiBot/assets/140245948/bc8b44a5-e6cb-42e2-a8b4-3116a6f30c56)
+
+# FlexiBot 🤖
 Welcome to FlexiBot, your responsive and friendly chatbot! FlexiBot can help with questions, provide information, or just chat for fun. And it's super quick! Let's begin our conversation!
 
 ## How to Use
@@ -40,9 +46,7 @@ To run FlexiBot locally, follow these steps:
 3. Create a `.env` file and set your GROQ_API_KEY.
 4. Run the Streamlit app using `streamlit run app.py`.
 
-## About
-
-FlexiBot is developed and maintained by [Your Name]. It is built using advanced natural language processing techniques to provide a seamless chat experience.
+## Contribution
 
 Feel free to contribute to the project by opening issues or pull requests!
 
