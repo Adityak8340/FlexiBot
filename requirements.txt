@@ -3,5 +3,3 @@ groq
 langchain
 langchain-groq
 python-dotenv
-SpeechRecognition
-pyaudio==0.2.11
