@@ -79,7 +79,7 @@ def main():
     conversational_memory_length = st.sidebar.slider('Conversational memory length:', 1, 10, value=5)
     
     # Add a slider for typing speed in milliseconds
-    typing_speed = st.sidebar.slider('Typing speed (ms per letter):', 1, 100, value=50)
+    typing_speed = st.sidebar.slider('Typing speed (ms per letter):', 1, 10, value=5)
     typing_delay = typing_speed / 1000  # Convert milliseconds to seconds
 
     memory = ConversationBufferWindowMemory(k=conversational_memory_length, memory_key="chat_history", return_messages=True)
