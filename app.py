@@ -137,7 +137,7 @@ def main():
     # Display "About the Author" section
     st.sidebar.title("About the Author")
     st.sidebar.markdown("""
-    Hi there! I'm Aditya, an aspiring ML engineer with a passion for machine learning, deep learning, and problem-solving. I love working on diverse projects and exploring new technologies. Connect with me to stay updated on my latest projects and endeavors!
+    Hi there! I'm Aditya, an aspiring AI engineer with a passion for machine learning, deep learning, and problem-solving. I love working on diverse projects and exploring new technologies. Connect with me to stay updated on my latest projects and endeavors!
     """)
 
     # Function to display "Connect with Me" section
