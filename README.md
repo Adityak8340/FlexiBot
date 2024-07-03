@@ -2,6 +2,10 @@
 
 
 
+https://github.com/Adityak8340/FlexiBot/assets/140245948/8baa31c4-b8de-40ee-8918-4ee680d2792f
+
+
+
 
 ![FlexiBot](https://github.com/Adityak8340/FlexiBot/assets/140245948/bc8b44a5-e6cb-42e2-a8b4-3116a6f30c56)
 
