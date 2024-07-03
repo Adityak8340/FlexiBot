@@ -1,6 +1,6 @@
 # Sample
 
-[streamlit-app-2024-05-29-10-05-67.webm](https://github.com/Adityak8340/FlexiBot/assets/140245948/ceada8a2-323d-41fa-96b6-cfdfd5167039)
+
 
 
 ![FlexiBot](https://github.com/Adityak8340/FlexiBot/assets/140245948/bc8b44a5-e6cb-42e2-a8b4-3116a6f30c56)
