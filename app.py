@@ -1,14 +1,10 @@
 import streamlit as st
 import os
-from dotenv import load_dotenv  # Import load_dotenv to load the .env file
+from dotenv import load_dotenv
 import time
-
-# Load environment variables from the .env file
-load_dotenv()
-
+import google.generativeai as genai
+from PIL import Image
 from groq import Groq
-import random
-
 from langchain.chains import ConversationChain, LLMChain
 from langchain_core.prompts import (
     ChatPromptTemplate,
@@ -20,6 +16,19 @@ from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 
+# Load environment variables from the .env file
+load_dotenv()
+
+# Configure Google Generative AI
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+model = genai.GenerativeModel("gemini-pro-vision")
+
+def get_gemini_response(input_text, image):
+    if input_text:
+        response = model.generate_content([input_text, image])
+    else:
+        response = model.generate_content(image)
+    return response.text
 
 def display_typing_effect(text, delay):
     """
@@ -35,12 +44,11 @@ def display_typing_effect(text, delay):
         placeholder.markdown(f'<div style="word-wrap: break-word;">{typed_text}</div>', unsafe_allow_html=True)
         time.sleep(delay)
 
-
 def main():
     """
     This function is the main entry point of the application. It sets up the Groq client, the Streamlit interface, and handles the chat interaction.
     """
-    st.set_page_config(page_title='FlexiBot', layout='wide')
+    st.set_page_config(page_title='FlexiBot with Vision', layout='wide')
     # Apply custom CSS to improve text layout
     st.markdown(
         """
@@ -66,13 +74,13 @@ def main():
         st.image('FlexiBot.jpg')
 
     # The title and greeting message of the Streamlit application
-    st.title("Chat with FlexiBot!")
-    st.write("Hi! I'm FlexiBot, your responsive and friendly chatbot. I can help with questions, provide information, or just chat for fun. And I'm super quick! Let's begin our conversation!")
+    st.title("FlexiBot")
+    st.write("Hi! I'm FlexiBot, your responsive and friendly chatbot. I can help with questions, provide information, or just chat for fun. Additionally, I can analyze images as well. Let's begin!")
 
     # Add customization options to the sidebar
     st.sidebar.title('Customization')
     system_prompt = st.sidebar.text_input("System prompt:")
-    model = st.sidebar.selectbox(
+    model_choice = st.sidebar.selectbox(
         'Choose a model',
         ['llama3-8b-8192', 'mixtral-8x7b-32768', 'gemma-7b-it']
     )
@@ -84,7 +92,7 @@ def main():
 
     memory = ConversationBufferWindowMemory(k=conversational_memory_length, memory_key="chat_history", return_messages=True)
 
-    # session state variable
+    # Session state variable
     if 'chat_history' not in st.session_state:
         st.session_state.chat_history = []
 
@@ -97,42 +105,46 @@ def main():
     # Initialize Groq Langchain chat object and conversation
     groq_chat = ChatGroq(
         groq_api_key=groq_api_key, 
-        model_name=model
+        model_name=model_choice
     )
 
-    # If the user has asked a question,
-    user_question = st.text_input("Ask a question:")
-    if user_question:
-        # Construct a chat prompt template using various components
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                SystemMessage(
-                    content=system_prompt
-                ),  # This is the persistent system prompt that is always included at the start of the chat.
+    # Handle image upload and text input
+    input_text = st.text_input("Ask a question or provide input for image analysis:")
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+    image = None
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
+        st.image(image, caption='Uploaded Image.', use_column_width=True)
 
-                MessagesPlaceholder(
-                    variable_name="chat_history"
-                ),  # This placeholder will be replaced by the actual chat history during the conversation. It helps in maintaining context.
+    if input_text:
+        if image:
+            response = get_gemini_response(input_text, image)
+            st.subheader("Flexibot Vision:")
+        else:
+            # Construct a chat prompt template using various components
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    SystemMessage(content=system_prompt),
+                    MessagesPlaceholder(variable_name="chat_history"),
+                    HumanMessagePromptTemplate.from_template("{human_input}"),
+                ]
+            )
 
-                HumanMessagePromptTemplate.from_template(
-                    "{human_input}"
-                ),  # This template is where the user's current input will be injected into the prompt.
-            ]
-        )
-
-        # Create a conversation chain using the LangChain LLM (Language Learning Model)
-        conversation = LLMChain(
-            llm=groq_chat,  # The Groq LangChain chat object initialized earlier.
-            prompt=prompt,  # The constructed prompt template.
-            verbose=True,   # Enables verbose output, which can be useful for debugging.
-            memory=memory,  # The conversational memory object that stores and manages the conversation history.
-        )
+            # Create a conversation chain using the LangChain LLM
+            conversation = LLMChain(
+                llm=groq_chat,
+                prompt=prompt,
+                verbose=True,
+                memory=memory,
+            )
+            
+            # Generate the chatbot's answer
+            response = conversation.predict(human_input=input_text)
+            message = {'human': input_text, 'AI': response}
+            st.session_state.chat_history.append(message)
+            st.subheader("FlexiBot Response:")
         
-        # The chatbot's answer is generated by sending the full prompt to the Groq API.
-        response = conversation.predict(human_input=user_question)
-        message = {'human': user_question, 'AI': response}
-        st.session_state.chat_history.append(message)
-        display_typing_effect(response, typing_delay)  # Use the typing effect function with delay
+        display_typing_effect(response, typing_delay)
 
     # Display "About the Author" section
     st.sidebar.title("About the Author")
@@ -155,7 +167,6 @@ def main():
 
     # Display "Connect with Me" section
     display_connect_with_me()
-
 
 if __name__ == "__main__":
     main()
